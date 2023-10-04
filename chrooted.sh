@@ -19,8 +19,6 @@ if [[ "$EUID" != "0" ]]; then
     exit 1
 fi
 
-[[ ! -f cryst.tgz ]] && ./mk_arch_tarball.sh
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=LeahyCenter
 
-./build.sh cryst.raw cryst.tgz
-
-qemu-system-x86_64 -enable-kvm -bios /usr/share/edk2/x64/OVMF.fd -hda cryst.raw
+grub-mkconfig -o /boot/grub/grub.cfg
