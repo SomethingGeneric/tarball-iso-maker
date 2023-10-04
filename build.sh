@@ -70,20 +70,11 @@ cp -r $tmpd/* mntpt
 rm -rf $tmpd
 
 inf "Installing grub"
-arch-chroot mntpt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --recheck --no-floppy --removable --debug
+cp chrooted.sh mntpt/.
+chmod +x mntpt/chrooted.sh
+arch-chroot mntpt /chrooted.sh
+rm mntpt/chrooted.sh
 
-# inf "Installing grub bios"
-# arch-chroot mntpt grub-install --target=i386-pc --boot-directory=mntpt/boot --recheck --no-floppy --removable --debug $loopdev
-
-arch-chroot mntpt /usr/bin/grub-mkconfig -o /boot/grub/grub.cfg
-
-inf "Partition info:"
-partuuid=$(fdisk -l $fn | grep "Disk identifier" | awk '{split($0,a,": "); print a[2]}' | sed 's/0x//g')
-echo "Partuuid: $partuuid"
-
-#mv mntpt/boot/grub/grub.cfg .
-#prompt "Edit grub config, then press enter"
-#mv "grub.cfg" "mntpt/boot/grub/grub.cfg"
 
 inf "Unmounting filesystems"
 umount mntpt/boot/efi
