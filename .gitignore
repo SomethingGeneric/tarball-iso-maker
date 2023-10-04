@@ -1,0 +1,5 @@
+*.tgz
+*.tgz.tmp
+*.tmp
+foo/
+pacdest/
